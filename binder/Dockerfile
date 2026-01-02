@@ -13,18 +13,15 @@ RUN apt-get update && apt-get install -y \
 
 USER ${NB_UID}
 
-# 3. Install Python libraries
-# (Note: Using a single RUN command is good for reducing image layers)
-RUN pip install --no-cache-dir \
-    pybullet \
-    pyswip \
-    numpy \
-    pyvirtualdisplay
+# 3. Handle Python Requirements
+# Copy the requirements file from your computer into the Docker image
+COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/requirements.txt
+
+# Install the libraries listed in that file
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # 4. Set the Working Directory 
-# We use /home/jovyan/work as it is the standard 'persistent' folder
 WORKDIR /home/jovyan/work
 
-# 5. Copy your project files into the container
-# This ensures that when Binder launches, the code is already there.
+# 5. Copy the rest of your project (Notebooks, Images, URDFs)
 COPY --chown=${NB_UID}:${NB_GID} . /home/jovyan/work
