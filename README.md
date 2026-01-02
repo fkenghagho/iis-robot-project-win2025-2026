@@ -3,6 +3,10 @@
 ## 1. Project Overview
 This project requires you to design, implement, and integrate the full cognitive and motor stack for a robotic agent. You must apply the 10 core modules of the **Intelligent Interactive Systems (IIS)** course to move from a raw URDF model to a fully autonomous, reasoning, and learning agent situated in a physical environment.
 
+<p align="center">
+  <img src="./imgs/Illustration.jpg" alt="Robot in Action" width="600">
+</p>
+
 ---
 
 ## 2. Task Specification (Module 1)
