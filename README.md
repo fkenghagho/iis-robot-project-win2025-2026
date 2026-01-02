@@ -48,7 +48,7 @@ Use **Prolog (PySwip)** to store semantic information about the world state (e.g
 Optimize your system through experience. Implement a routine to "learn" or tune parameters (e.g., PID gains or vision thresholds) based on past success/failure.
 
 ### [M10] Cognitive Architecture
-Integrate all modules into a unified "Sense-Think-Act" loop in `notebooks/cognitive_robots.ipynb`.
+Integrate all modules into a unified "Sense-Think-Act" loop in `notebooks/cognitive_architecture.ipynb`.
 
 ---
 
@@ -85,3 +85,11 @@ Integrate all modules into a unified "Sense-Think-Act" loop in `notebooks/cognit
 - **System Robustness**, 20% (Handling noise, changes & pushes)
 - **Integration & Logic**, 20% (Clean architecture & reasoning)
 - **Optimization**, 10% (Speed/Performance)
+
+
+## 8. Working online directly on BinderHub
+
+Click below to run the system online. Please, note that the online work is volatile. **Save your work from time to time on your local computer.**
+
+[<img src="https://mybinder.org/badge_logo.svg">](https://binder.intel4coro.de/v2/gh/fkenghagho/iis-robot-project-win2025-2026/HEAD?labpath=notebooks/cognitive_architecture.ipynb)
+
