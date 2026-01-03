@@ -4,6 +4,20 @@ import time
 
 import numpy as np
 
+def detect_collision(robot_id, target_list):
+    """
+    Checks if the robot is touching any object in the target_list.
+    Returns (True, object_id) if a collision exists, else (False, None).
+    """
+    contacts = p.getContactPoints(bodyA=robot_id)
+    
+    for contact in contacts:
+        hit_id = contact[2] # ID of the object collided with
+        if hit_id in target_list:
+            return True, hit_id
+            
+    return False, None
+
 # PID Constants (These are the "tuning knobs" for your students)
 Kp_dist = 52.0  # Force to move forward
 Kp_angle = 10.0 # Force to turn
@@ -48,10 +62,10 @@ def setup_simulation():
     p.setGravity(0, 0, -9.81)
 
     # 1. Spawn the Room
-    p.loadURDF("room.urdf", [0, 0, 0], useFixedBase=True)
+    room_id=p.loadURDF("room.urdf", [0, 0, 0], useFixedBase=True)
 
     # 2. Spawn the Target Table
-    table_id = p.loadURDF("table/table.urdf", basePosition=[2, 2, 0], useFixedBase=True)
+    table_id = p.loadURDF("table/table.urdf", basePosition=[2, 2, 0], useFixedBase=False)
 
     # 3. Spawn Obstacles (Random Blocks)
     # A heavy crate
@@ -62,10 +76,10 @@ def setup_simulation():
     # 4. Spawn the Husky Robot
     robot_id = p.loadURDF("husky/husky.urdf", basePosition=[-3, -3, 0.2])
     
-    return robot_id, table_id
+    return robot_id, table_id, room_id
 
 def main():
-    robot_id, table_id = setup_simulation()
+    robot_id, table_id, room_id = setup_simulation()
     
     # Set camera to see the whole room
     p.resetDebugVisualizerCamera(cameraDistance=12, cameraYaw=45, cameraPitch=-45, cameraTargetPosition=[0,0,0])
@@ -83,17 +97,46 @@ def main():
         targetVelocity=0, 
         force=0  # This "disables" the internal motor
       )
-
+      
+    # List of IDs to monitor (e.g., [floor_id, table_id, wall_id])
+    danger_zones = [room_id, table_id]
+    debug_text_id = -1
+    
+    
+    
     while p.isConnected():
-          dist = pid_to_target(robot_id, target)
-          print ('Distance: ', dist)
-          if dist < 0.5:
+    
+       # Check for collisions
+       is_colliding, target_id = detect_collision(robot_id, danger_zones)
+
+       if is_colliding:
+          # Get the name of the object from the URDF info
+          obj_name = p.getBodyInfo(target_id)[1].decode('utf-8')
+          status_msg = f"COLLISION: {obj_name}"
+          text_color = [1, 0, 0]  # Red
+       else:
+          status_msg = "STATUS: CLEAR"
+          text_color = [0, 1, 0]  # Green
+
+       # Update corner text (Static position in world space)
+       debug_text_id = p.addUserDebugText(
+        text=status_msg,
+        textPosition=[0, 0, 3], # High Z to keep it "in the corner"
+        textColorRGB=text_color,
+        textSize=2.0,
+        replaceItemUniqueId=debug_text_id
+       )
+          
+          
+       dist = pid_to_target(robot_id, target)
+       print ('Distance: ', dist)
+       if dist < 0.5:
              print("Target Reached!")
              # Apply braking torque
              for i in range(2, 6):
                  p.setJointMotorControl2(robot_id, i, p.TORQUE_CONTROL, force=0)  
-          p.stepSimulation()
-          time.sleep(1./240.)
+       p.stepSimulation()
+       time.sleep(1./240.)
 
 if __name__ == "__main__":
     main()
