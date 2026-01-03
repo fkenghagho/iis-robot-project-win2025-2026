@@ -112,4 +112,4 @@ docker compose up --build
 docker compose up
 
 ```
-Note that your working directory on the local machine is linked to the working directory of the container. Changes on your local machine are directly reflected on the docker container. Hence, no need to rebuild the container.
+Note that your working directory on the local machine is linked to the working directory of the container (see binder/docker-compose.yml). Changes on your local machine are directly reflected on the docker container. Hence, no need to rebuild the container after modifying your codes.
