@@ -181,6 +181,6 @@ Note that your working directory on the local machine is linked to the working d
        p.stepSimulation()  # DO NOT TOUCH
        time.sleep(1./240.) # DO NOT TOUCH
 ```
-3. You must not use the built-in pybullet function `p.getBasePositionAndOrientation(object_id)` except may be in the woorld_builder.py for validating your initial map of the world.
+3. You must not use the built-in pybullet function `p.getBasePositionAndOrientation(object_id)` except may be in the `world_builder.py` for validating your initial map of the world.
 
 4. You must not use the built-in pybullet function `p.getContactPoints(object_id)` as a dedicated sensor for touch sensing has been provided to you in `sensor_wrappers.py`.
