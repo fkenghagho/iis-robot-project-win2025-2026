@@ -169,3 +169,18 @@ docker compose up
 ```
 
 Note that your working directory on the local machine is linked to the working directory of the container (see binder/docker-compose.yml). Changes on your local machine are directly reflected on the docker container. Hence, no need to rebuild the container after modifying your codes.
+
+
+## 11. ⚠️ Warning 
+
+1. You must not change the `README.md` and `sensor_wrappers.py`. For this reason, they can be changed without your concern for reasons such as clarification.
+2. You must maintain the following while structure in your main function:
+```bash
+ while p.isConnected(): # DO NOT TOUCH
+       # file with your sense-think-act       
+       p.stepSimulation()  # DO NOT TOUCH
+       time.sleep(1./240.) # DO NOT TOUCH
+```
+3. You must not use the built-in pybullet function `p.getBasePositionAndOrientation(object_id)` except may be in the woorld_builder.py for validating your initial map of the world.
+
+4. You must not use the built-in pybullet function `p.getContactPoints(object_id)` as a dedicated sensor for touch sensing has been provided to you in `sensor_wrappers.py`.
